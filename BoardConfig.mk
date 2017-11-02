@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 
-LOCAL_PATH := device/xiaomi/mido
+LOCAL_PATH := device/xiaomi/rolex
 
 TARGET_SPECIFIC_HEADER_PATH := $(LOCAL_PATH)/include
 
@@ -31,8 +31,8 @@ TARGET_2ND_CPU_ABI := armeabi-v7a
 TARGET_2ND_CPU_ABI2 := armeabi
 TARGET_2ND_CPU_VARIANT := cortex-a53
 
-TARGET_BOARD_PLATFORM := msm8953
-TARGET_BOARD_PLATFORM_GPU := qcom-adreno506
+TARGET_BOARD_PLATFORM := msm8937
+TARGET_BOARD_PLATFORM_GPU := qcom-adreno308
 
 TARGET_BOARD_SUFFIX := _64
 TARGET_USES_64_BIT_BINDER := true
@@ -43,8 +43,10 @@ BOARD_KERNEL_CMDLINE := androidboot.hardware=qcom msm_rtb.filter=0x237 ehci-hcd.
 BOARD_KERNEL_IMAGE_NAME := Image.gz-dtb
 BOARD_KERNEL_PAGESIZE :=  2048
 BOARD_MKBOOTIMG_ARGS := --ramdisk_offset 0x01000000 --tags_offset 0x00000100
-TARGET_KERNEL_CONFIG := mido_defconfig
-TARGET_KERNEL_SOURCE := kernel/xiaomi/msm8953
+TARGET_KERNEL_CONFIG := rolex_defconfig
+TARGET_KERNEL_SOURCE := kernel/xiaomi/msm8937
+BOARD_CUSTOM_BOOTIMG_MK := $(LOCAL_PATH)/mkbootimg.mk
+TARGET_PREBUILT_KERNEL := $(LOCAL_PATH)/kernel
 
 # ANT
 BOARD_ANT_WIRELESS_DEVICE := "vfs-prerelease"
@@ -90,7 +92,7 @@ USE_CUSTOM_AUDIO_POLICY := 1
 USE_XML_AUDIO_POLICY_CONF := 1
 
 # Bootloader
-TARGET_BOOTLOADER_BOARD_NAME := MSM8953
+TARGET_BOOTLOADER_BOARD_NAME := MSM8937
 TARGET_NO_BOOTLOADER := true
 
 # Bluetooth
@@ -100,8 +102,10 @@ BOARD_HAVE_BLUETOOTH_QCOM := true
 BLUETOOTH_HCI_USE_MCT := true
 
 # Camera
+TARGET_HAS_LEGACY_CAMERA_HAL1 := true
 USE_DEVICE_SPECIFIC_CAMERA := true
-BOARD_QTI_CAMERA_32BIT_ONLY := true
+#BOARD_QTI_CAMERA_32BIT_ONLY := true
+TARGET_CAMERASERVICE_CLOSES_NATIVE_HANDLES := true
 TARGET_TS_MAKEUP := true
 
 # Charger
@@ -112,14 +116,10 @@ BOARD_CHARGER_DISABLE_INIT_BLANK := true
 BOARD_USES_CYANOGEN_HARDWARE := true
 BOARD_HARDWARE_CLASS += \
     hardware/cyanogen/cmhw \
-    device/xiaomi/mido/cmhw
-TARGET_TAP_TO_WAKE_NODE := "/proc/touchpanel/enable_dt2w"
+    device/xiaomi/rolex/cmhw
 
 # CNE / DPM
 BOARD_USES_QCNE := true
-
-# Cpusets
-ENABLE_CPUSETS := true
 
 # Crypto
 TARGET_HW_DISK_ENCRYPTION := true
@@ -128,7 +128,7 @@ TARGET_HW_DISK_ENCRYPTION := true
 ifeq ($(HOST_OS),linux)
   ifneq ($(TARGET_BUILD_VARIANT),eng)
     ifeq ($(WITH_DEXPREOPT),)
-      WITH_DEXPREOPT := true
+      WITH_DEXPREOPT := false
     endif
   endif
 endif
@@ -147,9 +147,8 @@ USE_OPENGL_RENDERER := true
 # Filesystem
 BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := ext4
 TARGET_USERIMAGES_USE_EXT4 := true
-TARGET_USERIMAGES_USE_F2FS := true
 
-#FM
+# FM
 BOARD_HAVE_QCOM_FM := true
 TARGET_QCOM_NO_FM_FIRMWARE := true
 
@@ -160,10 +159,16 @@ TARGET_NO_RPC := true
 # Filesystem
 TARGET_ANDROID_FILESYSTEM_CONFIG_H := $(LOCAL_PATH)/android_filesystem_config.h
 
+#Include path
+TARGET_SPECIFIC_HEADER_PATH := $(LOCAL_PATH)/include
+
 # Init
-TARGET_INIT_VENDOR_LIB := libinit_mido
+TARGET_INIT_VENDOR_LIB := libinit_rolex
 TARGET_PLATFORM_DEVICE_BASE := /devices/soc/
-TARGET_RECOVERY_DEVICE_MODULES := libinit_mido
+TARGET_RECOVERY_DEVICE_MODULES := libinit_rolex
+
+# Tap2Wake
+TARGET_TAP_TO_WAKE_NODE := "/proc/gesture/onoff"
 
 # Keymaster
 TARGET_PROVIDES_KEYMASTER := true
@@ -179,6 +184,7 @@ BOARD_USERDATAIMAGE_PARTITION_SIZE := 25765043200 # 25765059584 - 16384
 BOARD_CACHEIMAGE_PARTITION_SIZE := 268435456
 BOARD_PERSISTIMAGE_PARTITION_SIZE := 33554432
 BOARD_FLASH_BLOCK_SIZE := 131072 # (BOARD_KERNEL_PAGESIZE * 64)
+BLOCK_BASED_OTA := true
 
 # Peripheral manager
 TARGET_PER_MGR_ENABLED := true
@@ -195,7 +201,6 @@ BOARD_USES_QC_TIME_SERVICES := true
 TARGET_USE_SDCLANG := true
 
 # RIL
-BOARD_RIL_CLASS := ../../../$(LOCAL_PATH)/ril
 TARGET_RIL_VARIANT := caf
 
 # Recovery
@@ -218,7 +223,9 @@ BOARD_WPA_SUPPLICANT_DRIVER := NL80211
 BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_qcwcn
 WIFI_DRIVER_FW_PATH_AP := "ap"
 WIFI_DRIVER_FW_PATH_STA := "sta"
+WIFI_DRIVER_MODULE_NAME := "wlan"
+WIFI_DRIVER_MODULE_PATH := "/system/lib/modules/wlan.ko"
 WPA_SUPPLICANT_VERSION := VER_0_8_X
 
 # Inherit from the proprietary version
--include vendor/xiaomi/mido/BoardConfigVendor.mk
+-include vendor/xiaomi/rolex/BoardConfigVendor.mk

@@ -1,5 +1,5 @@
 #!/system/bin/sh
-# Copyright (c) 2009-2016, The Linux Foundation. All rights reserved.
+# Copyright (c) 2009-2015, The Linux Foundation. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -82,7 +82,7 @@ start_msm_irqbalance_8939()
 {
 	if [ -f /system/bin/msm_irqbalance ]; then
 		case "$platformid" in
-		    "239" | "293" | "294" | "295" | "304" | "313")
+		    "239" | "293" | "294" | "295" | "304")
 			start msm_irqbalance;;
 		esac
 	fi
@@ -219,7 +219,7 @@ case "$target" in
                   ;;
         esac
         ;;
-    "msm8994" | "msm8992" | "msmcobalt")
+    "msm8994" | "msm8992")
         start_msm_irqbalance
         ;;
     "msm8996")
@@ -260,16 +260,16 @@ case "$target" in
              hw_platform=`cat /sys/devices/system/soc/soc0/hw_platform`
         fi
         case "$soc_id" in
-             "294" | "295" | "303" | "307" | "308" | "309" | "313" | "320")
+             "294" | "295" | "303" | "307" | "308" | "309")
                   case "$hw_platform" in
                        "Surf")
-                                    setprop qemu.hw.mainkeys 0
+     #                               setprop qemu.hw.mainkeys 0
                                     ;;
                        "MTP")
-                                    setprop qemu.hw.mainkeys 0
+     #                               setprop qemu.hw.mainkeys 0
                                     ;;
                        "RCM")
-                                    setprop qemu.hw.mainkeys 0
+     #                               setprop qemu.hw.mainkeys 0
                                     ;;
                   esac
                   ;;
@@ -306,8 +306,16 @@ case "$target" in
         ;;
 esac
 
-# Set shared touchpanel nodes ownership (these are proc_symlinks to the real sysfs nodes)
-chown -LR system.system /proc/touchpanel
+bootmode=`getprop ro.bootmode`
+emmc_boot=`getprop ro.boot.emmc`
+case "$emmc_boot"
+    in "true")
+        if [ "$bootmode" != "charger" ]; then # start rmt_storage and rfs_access
+            start rmt_storage
+            start rfs_access
+        fi
+    ;;
+esac
 
 #
 # Copy qcril.db if needed for RIL
@@ -325,7 +333,7 @@ else
 fi
 
 cur_version_info=`cat /firmware/verinfo/ver_info.txt`
-if [ ! -f /firmware/verinfo/ver_info.txt -o "$prev_version_info" != "$cur_version_info" ]; then
+if [ "$prev_version_info" != "$cur_version_info" ]; then
     rm -rf /data/misc/radio/modem_config
     mkdir /data/misc/radio/modem_config
     chmod 770 /data/misc/radio/modem_config
@@ -334,20 +342,12 @@ if [ ! -f /firmware/verinfo/ver_info.txt -o "$prev_version_info" != "$cur_versio
     cp /firmware/verinfo/ver_info.txt /data/misc/radio/ver_info.txt
     chown radio.radio /data/misc/radio/ver_info.txt
 fi
-cp /firmware/image/modem_pr/mbn_ota.txt /data/misc/radio/modem_config
-chown radio.radio /data/misc/radio/modem_config/mbn_ota.txt
 echo 1 > /data/misc/radio/copy_complete
 
-#check build variant for printk logging
-#current default minimum boot-time-default
-buildvariant=`getprop ro.build.type`
-case "$buildvariant" in
-    "userdebug" | "eng")
-        #set default loglevel to KERN_INFO
-        echo "6 6 1 7" > /proc/sys/kernel/printk
-        ;;
-    *)
-        #set default loglevel to KERN_WARNING
-        echo "4 4 1 4" > /proc/sys/kernel/printk
-        ;;
-esac
+# Create /persist/alarm if necessary
+if [ ! -d /persist/alarm ]; then
+    mkdir /persist/alarm
+    chown system:system /persist/alarm
+    restorecon /persist/alarm
+fi
+
