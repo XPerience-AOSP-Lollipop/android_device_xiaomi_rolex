@@ -26,4 +26,4 @@ PRODUCT_GMS_CLIENTID_BASE := android-xiaomi
 
 PRODUCT_BUILD_PROP_OVERRIDES += \
     BUILD_FINGERPRINT=Xiaomi/rolex/rolex:6.0.1/MMB29M/V8.5.1.0.MCCMIED:user/release-keys \
-PRIVATE_BUILD_DESC="rolex-user 6.0.1 MMB29M V8.5.1.0.MCCMIED release-keys"
+    PRIVATE_BUILD_DESC="rolex-user 6.0.1 MMB29M V8.5.1.0.MCCMIED release-keys"
