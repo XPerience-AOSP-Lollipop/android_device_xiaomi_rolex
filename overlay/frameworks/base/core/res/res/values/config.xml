@@ -392,6 +392,4 @@
     <!-- Whether device supports double tap to wake -->
     <bool name="config_supportDoubleTapWake">true</bool>
 
-    <!-- Turn off LiveDisplay auto mode by default -->
-    <integer name="config_defaultLiveDisplayMode">0</integer>
 </resources>
