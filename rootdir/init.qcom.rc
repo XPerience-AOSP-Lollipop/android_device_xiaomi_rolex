@@ -62,6 +62,9 @@ on fs
     mkdir /persist/data 0700 system system
     restorecon_recursive /persist
 
+on post-fs
+    chmod 0755 /sys/kernel/debug/tracing
+
 on charger
     wait /dev/block/bootdevice/by-name/system
     mount ext4 /dev/block/bootdevice/by-name/system /system ro barrier=1
@@ -959,4 +962,4 @@ on property:vold.decrypt=trigger_restart_min_framework
     start time_daemon
 
 on property:vold.decrypt=trigger_restart_framework
-restart time_daemon
+    restart time_daemon
