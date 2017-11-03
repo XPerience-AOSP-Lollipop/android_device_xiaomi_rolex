@@ -243,8 +243,7 @@ PRODUCT_PACKAGES += \
     init.qcom.sdio.sh \
     init.qcom.wifi.sh \
     init.qcom.fm.sh \
-    init.qcom.post_boot.sh \
-    init.qcom.power.rc
+    init.qcom.post_boot.sh
 
 # RIL
 PRODUCT_PACKAGES += \
