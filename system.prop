@@ -45,7 +45,7 @@ qcom.bluetooth.soc=smd
 # Camera
 persist.camera.isp.clock.optmz=0
 vidc.enc.dcvs.extra-buff-count=2
-media.camera.ts.monotonic=1
+media.camera.ts.monotonic=0
 camera.display.umax=1920x1080
 camera.display.lmax=1280x720
 persist.camera.stats.test=5
