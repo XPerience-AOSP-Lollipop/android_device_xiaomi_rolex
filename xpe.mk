@@ -16,10 +16,10 @@
 
 $(call inherit-product, device/xiaomi/rolex/full_rolex.mk)
 
-# Inherit some common LineageOS stuff.
-$(call inherit-product, vendor/cm/config/common_full_phone.mk)
+# Inherit some common XPerience stuff.
+$(call inherit-product, vendor/XPe/config/common_full_phone.mk)
 
-PRODUCT_NAME := lineage_rolex
+PRODUCT_NAME := xpe_rolex
 BOARD_VENDOR := Xiaomi
 
 PRODUCT_GMS_CLIENTID_BASE := android-xiaomi
