@@ -48,7 +48,6 @@ camera.display.lmax=1280x720
 persist.sys.chgdisabled=0
 persist.camera.is_type=1
 persist.camera.gyro.android=1
-media.camera.ts.monotonic=0
 ro.def.camera.video.quality=100
 ro.def.camera.bright.main=middle
 camera.hal1.packagelist=com.skype.raider,com.google.android.talk
