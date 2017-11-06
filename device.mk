@@ -196,6 +196,7 @@ PRODUCT_COPY_FILES += \
 
 # OMX
 PRODUCT_PACKAGES += \
+    libmm-omxcore \
     libc2dcolorconvert \
     libOmxAacEnc \
     libOmxAmrEnc \
@@ -261,13 +262,11 @@ PRODUCT_PACKAGES += \
     libqsap_sdk \
     libQWiFiSoftApCfg \
     libwpa_client \
-    libwcnss_qmi \
     hostapd \
     dhcpcd.conf \
     wpa_supplicant \
     wpa_supplicant.conf \
-    wcnss_service \
-    libwifi-hal-qcom 
+    wcnss_service
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/wifi/hostapd.accept:system/etc/hostapd/hostapd.accept \
