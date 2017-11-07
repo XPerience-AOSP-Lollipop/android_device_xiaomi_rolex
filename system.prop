@@ -52,6 +52,8 @@ ro.def.camera.video.quality=100
 ro.def.camera.bright.main=middle
 camera.hal1.packagelist=com.skype.raider,com.google.android.talk
 camera2.portability.force_api=1
+media.camera.ts.monotonic=0
+persist.camera.HAL3.enabled=true
 
 # Cne
 persist.cne.feature=1
